@@ -7,11 +7,9 @@
 #   VIAME_ARGS_COMMON -
 ##
 
-set( VIAME_PROJECT_LIST ${VIAME_PROJECT_LIST} pytorch )
-
 CreateDirectory( ${VIAME_BUILD_PREFIX}/src/pytorch-build )
 
-set( PYTORCH_LIBRARIES pytorch torchvision mmcv mmdetection )
+set( PYTORCH_LIBRARIES mmcv mmdetection )
 
 if( VIAME_ENABLE_CUDNN )
   set(CUDNN_ENV "CUDNN_LIBRARY=${CUDNN_LIBRARIES}")
@@ -134,7 +132,7 @@ foreach( LIB ${PYTORCH_LIBRARIES} )
                                 "${CUDNN_ENV}"
           ${PYTHON_EXECUTABLE} setup.py build_ext --inplace )
       ExternalProject_Add( mmdet_${DEP}
-        DEPENDS fletch pytorch mmcv
+        DEPENDS fletch mmcv
         PREFIX ${VIAME_BUILD_PREFIX}
         SOURCE_DIR ${VIAME_PACKAGES_DIR}/pytorch-libs/${LIB}/mmdet/ops/${DEP}
         STAMP_DIR ${VIAME_BUILD_PREFIX}/src/pytorch-build/${DEP}-stamp
@@ -146,12 +144,12 @@ foreach( LIB ${PYTORCH_LIBRARIES} )
         )
     endforeach()
 
-    set( PROJECT_DEPS fletch pytorch mmcv
+    set( PROJECT_DEPS fletch mmcv
          mmdet_roi_align mmdet_roi_pool mmdet_dcn mmdet_nms )
   elseif( "${LIB}" STREQUAL "pytorch" )
     set( PROJECT_DEPS fletch )
   else()
-    set( PROJECT_DEPS fletch pytorch )
+    set( PROJECT_DEPS fletch )
   endif()
 
   ExternalProject_Add( ${LIB}
