@@ -9,7 +9,7 @@ jobs:
 
       - run:
           name: build
-          command: ./cmake/build_server_centos.sh
+          command: chmod +x cmake/build_server_centos.sh && ./cmake/build_server_centos.sh
 
       - run:
           name: Print the Current Time
